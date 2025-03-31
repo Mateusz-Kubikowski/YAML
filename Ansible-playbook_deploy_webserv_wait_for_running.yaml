@@ -7,7 +7,7 @@
       k8s:
         kubeconfig: "/home/vboxuser/.kube/config" 
         state: present
-        definition: "{{ lookup('file', 'Adeploy_php.yaml') }}"
+        definition: "{{ lookup('file', 'Create_3_pods_run_index_php_show_pod_ip.yaml') }}"
 
     - name: Wait for pods to be running
       k8s_info:
