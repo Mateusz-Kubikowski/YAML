@@ -1,0 +1,21 @@
+---
+- name: Deploy Kubernetes manifest for webserver
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Apply Kubernetes manifest
+      k8s:
+        kubeconfig: "/home/vboxuser/.kube/config" 
+        state: present
+        definition: "{{ lookup('file', 'Adeploy_php.yaml') }}"
+
+    - name: Wait for pods to be running
+      k8s_info:
+        kubeconfig: "/home/vboxuser/.kube/config"
+        kind: Pod
+        namespace: default
+      register: pod_info
+      until: pod_info.resources | selectattr('status.phase', 'equalto', 'Running') == 3
+      retries: 10
+      delay: 10
+
